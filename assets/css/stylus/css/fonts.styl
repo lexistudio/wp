@@ -1,0 +1,11 @@
+// Fonts mixin
+font-url(file)
+  return '../fonts/' + file
+
+webfont(family, file, style = "normal", weight = 'normal')
+  @font-face
+    font-family family
+    src url(font-url(file + '.woff')) format('woff'),
+        url(font-url(file + '.woff2')) format('woff2')
+    font-weight weight
+    font-style style
