@@ -1,47 +1,66 @@
-<?php
-/**
- * The header for our theme
- *
- * This is the template that displays all of the <head> section and everything up until <div id="content">
- *
- * @link https://developer.wordpress.org/themes/basics/template-files/#template-partials
- *
- * @package zem
- */
-
-?>
+<?php if(isset($_POST['contact'])) { $error = ale_send_contact($_POST['contact']); }?>
 <!doctype html>
-<html <?php language_attributes(); ?>>
 <head>
-  <meta charset="<?php bloginfo( 'charset' ); ?>">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="profile" href="http://gmpg.org/xfn/11">
-
-  <?php wp_head(); ?>
+	<meta charset="<?php bloginfo( 'charset' ); ?>" />
+	<?php wp_head(); ?>
 </head>
-
 <body <?php body_class(); ?>>
-  <header class="head <?php echo is_front_page() && !is_home() ? '' : 'head--work'; ?>">
-    <div class="container">
-      <div class="head__elem">
-        <div class="head__item">
-          <a href="/" class="head__logo"></a>
-          <?php the_custom_logo(); ?>
-        </div>
-        <div class="head__item">
-          <a href="tel:+74957976369" class="head__phone">
-            +7 (495) 797-63-69
-          </a>
-          <?php
-            wp_nav_menu( array(
-              'theme_location' => 'default',
-              'menu_id'        => 'primary-menu',
-              'menu_class' => '11112222'
-            ) );
-          ?>
-        </div>
-      </div>
-    </div>
-  </header>
 
-  <div id="content" class="site-content">
+    <?php get_template_part('partials/preloader'); ?>
+
+    <div class="wrapper olins_site_container"><!-- Wrapper start -->
+        <?php
+        /*
+         * Show the Header based on Theme Options Settings.
+         */
+        $ale_design_variant = ale_get_option('design_variant');
+
+        if($ale_design_variant){
+            switch ($ale_design_variant){
+                case 'zoo' :
+                case 'furniture' :
+                case 'magazine' :
+                    get_template_part('partials/header/zoo');
+                    break;
+                case 'blackwhite' :
+                case 'stephanie' :
+                    get_template_part('partials/header/blackwhite');
+                    break;
+                case 'bakery' :
+                    get_template_part('partials/header/bakery');
+                    break;
+                case 'photography' :
+                case 'camping' :
+                case 'pixel' :
+                    get_template_part('partials/header/photography');
+                    break;
+                case 'luxuryshoes' :
+                    get_template_part('partials/header/luxuryshoes');
+                    break;
+                case 'travelphoto' :
+                case 'cv' :
+                    get_template_part('partials/header/travelphoto');
+                    break;
+                case 'viaje' :
+                    get_template_part('partials/header/viaje');
+                    break;
+                case 'wedding' :
+                    get_template_part('partials/header/wedding');
+                    break;
+                case 'creative' :
+                    get_template_part('partials/header/creative');
+                    break;
+                case 'brigitte' :
+                case 'corporate' :
+                case 'fashion' :
+                case 'pastel' :
+                case 'cameron' :
+                case 'jade' :
+                    get_template_part('partials/header/brigitte');
+                    break;
+            }
+        } ?>
+
+        <div class="ale_main_container cf"><!-- Main Container Start -->
+            <div class="ale_container">
+

@@ -3,6 +3,7 @@ var minifyCss = require('gulp-minify-css');
 var stylus = require('gulp-stylus');
 var requirejsOptimize = require('gulp-requirejs-optimize');
 var watch = require('gulp-watch'); 
+var sftp = require('gulp-sftp');
 
 gulp.task('css', function () {
   gulp.src('./assets/css/stylus/app.styl')
@@ -29,3 +30,13 @@ gulp.task('watch', function() {
 });
 
 gulp.task('default', ['css', 'watch']);
+
+gulp.task('deploy', function () {
+  return gulp.src('**')
+        .pipe(sftp({
+          host: 'piter33.dns-rus.net',
+          user: 'schpil',
+          pass: '7307084bdd7db15c81d19432a2507a52',
+          remotePath: '/home/schpil/dooob.ru/wp/zem/wp-content/themes/zem'
+        }));
+});

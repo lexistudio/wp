@@ -1,17 +1,7 @@
-<?php
-/**
- * The sidebar containing the main widget area
- *
- * @link https://developer.wordpress.org/themes/basics/template-files/#template-partials
- *
- * @package zem
- */
-
-if ( ! is_active_sidebar( 'sidebar-1' ) ) {
-	return;
-}
-?>
-
-<aside id="secondary" class="widget-area">
-	<?php dynamic_sidebar( 'sidebar-1' ); ?>
-</aside><!-- #secondary -->
+<?php if ( is_active_sidebar( 'main-sidebar' ) ) { ?>
+    <aside class="sidebar cf">
+        <div class="sidebar_container">
+            <?php dynamic_sidebar( 'main-sidebar' ); ?>
+        </div>
+    </aside>
+<?php } ?>

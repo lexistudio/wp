@@ -1,39 +1,46 @@
-<?php
-/**
- * The template for displaying all pages
- *
- * This is the template that displays all pages by default.
- * Please note that this is the WordPress construct of pages
- * and that other 'pages' on your WordPress site may use a
- * different template.
- *
- * @link https://developer.wordpress.org/themes/basics/template-hierarchy/
- *
- * @package zem
- */
+<?php get_header(); ?>
+<?php if(!is_front_page()){ get_template_part('partials/page_heading'); }
 
-get_header();
+//Sidebar position based on theme options
+$ale_sidebar_position = ale_get_option('blog_sidebar_position');
+if(ale_get_meta('sidebar_position') !== ''){
+    $ale_sidebar_position = ale_get_meta('sidebar_position');
+}
+$sidebar_class = '';
+
+if($ale_sidebar_position){
+    $sidebar_class = 'sidebar_position_'. $ale_sidebar_position;
+}
 ?>
 
-	<div id="primary" class="content-area">
-		<main id="main" class="site-main">
+    <div class="content_wrapper flex_container <?php  echo esc_attr($sidebar_class); ?> cf">
+        <?php if($ale_sidebar_position  !== 'no'){
+            get_sidebar();
+        } ?>
+        <div class="story ale_blog_archive page-template content cf">
+            <?php if (have_posts()) : while (have_posts()) : the_post(); ?>
+                <?php if(!is_front_page()){ ?>
+                    <?php if(ale_get_meta('post_title_position') == 'afterheading' or ale_get_meta('post_title_position') == 'afterheadingwithdefaults' or ale_get_meta('post_title_position') == 'fullwidthwedding'){ ?>
+                        <h2 class="post_title"><?php esc_attr(the_title()); ?></h2>
+                        <?php if(ale_get_meta('post_pre_title')){ ?>
+                            <p class="pre_title"><?php echo esc_attr(ale_get_meta('post_pre_title')); ?></p>
+                        <?php } ?>
+                    <?php } ?>
+                <?php } ?>
 
-		<?php
-		while ( have_posts() ) :
-			the_post();
+                <?php if(ale_get_meta('featured_position') == 'in_content'){
+                    echo '<div class="single_featured_image">'.get_the_post_thumbnail($post->ID,'large').'</div>';
+                } ?>
 
-			get_template_part( 'template-parts/content', 'page' );
+                <?php the_content(); ?>
 
-			// If comments are open or we have at least one comment, load up the comment template.
-			if ( comments_open() || get_comments_number() ) :
-				comments_template();
-			endif;
+            <?php endwhile; else: ?>
+                <?php get_template_part('partials/notfound')?>
+            <?php endif; ?>
 
-		endwhile; // End of the loop.
-		?>
-
-		</main><!-- #main -->
-	</div><!-- #primary -->
-
-<?php
-get_footer();
+        <?php if (comments_open()) : ?>
+            <?php comments_template(); ?>
+        <?php endif; ?>
+            </div>
+    </div>
+<?php get_footer(); ?>

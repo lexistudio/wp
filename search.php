@@ -1,55 +1,47 @@
-<?php
-/**
- * The template for displaying search results pages
- *
- * @link https://developer.wordpress.org/themes/basics/template-hierarchy/#search-result
- *
- * @package zem
- */
+<?php get_header(); ?>
+<?php get_template_part('partials/page_heading');
 
-get_header();
+//Sidebar position based on theme options
+$ale_sidebar_position = ale_get_option('blog_sidebar_position');
+$sidebar_class = '';
+
+if($ale_sidebar_position){
+    $sidebar_class = 'sidebar_position_'. $ale_sidebar_position;
+}
 ?>
 
-	<section id="primary" class="content-area">
-		<main id="main" class="site-main">
+    <div class="content_wrapper blog_posts flex_container <?php  echo esc_attr($sidebar_class); ?> cf">
 
-		<?php if ( have_posts() ) : ?>
+        <?php if($ale_sidebar_position  !== 'no'){
+            get_sidebar();
+        } ?>
+        <!-- Content -->
+        <div class="story ale_blog_archive content cf">
+            <?php
+            //Columns Settings
+            $ale_blog_columns = ale_get_option('default_blog_columns');
+            $ale_columns_class = '';
+            if($ale_blog_columns){
+                $ale_columns_class = 'ale_blog_columns_'.$ale_blog_columns;
+            }
+            //Text Align Settings
+            $ale_blog_text_align = ale_get_option('default_blog_text_align');
+            $ale_text_align_class = '';
+            if($ale_blog_text_align){
+                $ale_text_align_class = 'ale_blog_text_align_'.$ale_blog_text_align;
+            }
+            ?>
+            <div class="grid <?php echo esc_attr($ale_columns_class)." ".esc_attr($ale_text_align_class); ?>">
+                <div class="grid-sizer"></div>
+                <div class="gutter-sizer"></div>
+                <?php if (have_posts()) : while (have_posts()) : the_post(); ?>
+                    <?php get_template_part('partials/postpreview' );?>
+                <?php endwhile; else: ?>
+                    <?php get_template_part('partials/notfound')?>
+                <?php endif; ?>
+            </div>
+            <?php get_template_part('partials/pagination'); ?>
+        </div>
 
-			<header class="page-header">
-				<h1 class="page-title">
-					<?php
-					/* translators: %s: search query. */
-					printf( esc_html__( 'Search Results for: %s', 'zem' ), '<span>' . get_search_query() . '</span>' );
-					?>
-				</h1>
-			</header><!-- .page-header -->
-
-			<?php
-			/* Start the Loop */
-			while ( have_posts() ) :
-				the_post();
-
-				/**
-				 * Run the loop for the search to output the results.
-				 * If you want to overload this in a child theme then include a file
-				 * called content-search.php and that will be used instead.
-				 */
-				get_template_part( 'template-parts/content', 'search' );
-
-			endwhile;
-
-			the_posts_navigation();
-
-		else :
-
-			get_template_part( 'template-parts/content', 'none' );
-
-		endif;
-		?>
-
-		</main><!-- #main -->
-	</section><!-- #primary -->
-
-<?php
-get_sidebar();
-get_footer();
+    </div>
+<?php get_footer(); ?>
